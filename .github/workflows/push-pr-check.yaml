@@ -21,15 +21,18 @@ jobs:
         with:
           node-version: '18.x'
 
+      - name: Start MongoDB
+        uses: supercharge/mongodb-github-action@1.12.0
+        with:
+          mongodb-version: '6.0'
+
       - name: Install dependencies
         run: npm install
-
-      - name: Generate GraphQL types
-        run: npm run codegen
 
       - name: Compile TypeScript
         run: npm run build
 
       - name: Run linters
         run: npm run lint
-
+        env:
+          MONGODB_URI: ${{ secrets.MONGODB_URI }}
