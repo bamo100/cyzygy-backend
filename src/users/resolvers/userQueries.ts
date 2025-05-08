@@ -22,7 +22,10 @@ export const getAllUsers = {
         // Build the filter object based on provided arguments
         const filter: any = {};
         if (searchTerm) {
-            filter.name = { $regex: searchTerm, $options: 'i' };
+            filter.$or = [
+              { firstName: { $regex: searchTerm, $options: 'i' } },
+              { lastName: { $regex: searchTerm, $options: 'i' } },
+            ];
         }
         if (role) {
             filter.role = role;
