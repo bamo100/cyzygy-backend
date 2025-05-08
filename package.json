@@ -8,6 +8,7 @@
     "start": "ts-node src/index.ts",
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts",
     "seed:users": "ts-node seeders/seedUsers.ts",
+    "lint": "eslint \"src/**/*.{js,ts}\"",
     "build": "tsc"
   },
   "keywords": [],
@@ -22,6 +23,8 @@
     "@types/express-graphql": "^0.9.2",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/node": "^22.15.3",
+    "@typescript-eslint/eslint-plugin": "^8.32.0",
+    "@typescript-eslint/parser": "^8.32.0",
     "eslint": "^9.26.0",
     "globals": "^16.0.0",
     "nodemon": "^3.1.10",
