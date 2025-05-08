@@ -1,5 +1,6 @@
 import { GraphQLObjectType, GraphQLInt, GraphQLList } from 'graphql';
 import UserType from './UserType'; // Your existing UserType
+import { SearchType } from './SearchType';
 
 const PaginationInfoType = new GraphQLObjectType({
   name: 'PaginationInfo',
@@ -14,7 +15,8 @@ const PaginationInfoType = new GraphQLObjectType({
 export const PaginatedUsersType = new GraphQLObjectType({
   name: 'PaginatedUsers',
   fields: {
-    users: { type: new GraphQLList(UserType) },
+    data: { type: new GraphQLList(UserType) },
     pagination: { type: PaginationInfoType },
+    search: { type: new GraphQLList(SearchType) },
   },
 });

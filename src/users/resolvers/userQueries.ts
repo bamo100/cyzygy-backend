@@ -11,24 +11,45 @@ export const getAllUsers = {
     args: {
         page: { type: GraphQLInt, defaultValue: 1 },
         limit: { type: GraphQLInt, defaultValue: 10 },
+        searchTerm: { type: GraphQLString },
+        role  : { type: GraphQLString },
+        status: { type: GraphQLString },
     },
     resolve: async (_: unknown, args: { [key: string]: any }) => {
-        const { page, limit } = args;
+        const { page, limit, searchTerm, role, status } = args;
         const skip = (page - 1) * limit;
 
+        // Build the filter object based on provided arguments
+        const filter: any = {};
+        if (searchTerm) {
+            filter.name = { $regex: searchTerm, $options: 'i' };
+        }
+        if (role) {
+            filter.role = role;
+        }
+        if (status) {
+            filter.status = status;
+        }
+
+         // Fetch total count and paginated users concurrently
         const [total, users] = await Promise.all([
-            User.countDocuments(),
-            User.find().skip(skip).limit(limit),
+            User.countDocuments(filter),
+            User.find(filter).skip(skip).limit(limit),
         ]);
         
         const pages = Math.ceil(total / limit);
         
         return {
-            users: users.map((user) => ({
-              ...user.toObject(),
-              id: user._id,
-              createdAt: user.createdAt.toISOString(),
-              updatedAt: user.updatedAt.toISOString(),
+            data: users.map((user) => ({
+                id: user._id,
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                role: user.role,
+                status: user.status,
+                avatar: user.avatar,
+                createdAt: user.createdAt.toISOString(),
+                updatedAt: user.updatedAt.toISOString(),
             })),
             pagination: {
               total,
